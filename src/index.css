@@ -1,0 +1,181 @@
+@import 'tailwindcss';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Design tokens. Components use the semantic names below, so switching modes only swaps values. */
+:root {
+  --page: #f6f8fb;
+  --surface: #ffffff;
+  --soft: #f1f5fa;
+  --line: #e1e7f0;
+  --fg: #0f1b2d;
+  --muted: #5b6b82;
+  --accent: #1b6fc9;
+  --on-accent: #ffffff;
+  --accent-text: #1a5fb4;
+  --accent-soft: #e8f3ff;
+  --accent-line: #9ccbf5;
+  --warn-soft: #fff4d1;
+  --warn-text: #6b4e00;
+  --danger: #c2352b;
+  --danger-soft: #fce0dd;
+  --danger-text: #9b2c25;
+  /* Auth page art */
+  --dot-hi: #1b6fc9;
+  --dot-lo: #9ccbf5;
+  --tag: #6fa6e0;
+  --attr: #2e78c7;
+  --str: #b26a00;
+  color-scheme: light;
+}
+
+.dark {
+  --page: #0a0f1c;
+  --surface: #101828;
+  --soft: #080c16;
+  --line: #1f2a44;
+  --fg: #e6eeff;
+  --muted: #8a9bbf;
+  --accent: #2d9cff;
+  --on-accent: #04101f;
+  --accent-text: #5cc0ff;
+  --accent-soft: #0f2240;
+  --accent-line: #2d9cff;
+  --warn-soft: #2a2410;
+  --warn-text: #ffd166;
+  --danger: #f5736a;
+  --danger-soft: #40201e;
+  --danger-text: #f5ada6;
+  --dot-hi: #5cc0ff;
+  --dot-lo: #1f4a80;
+  --tag: #3a66a8;
+  --attr: #8fd0ff;
+  --str: #ffd166;
+  color-scheme: dark;
+}
+
+@theme {
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Space Grotesk', 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+}
+
+@theme inline {
+  --color-page: var(--page);
+  --color-surface: var(--surface);
+  --color-soft: var(--soft);
+  --color-line: var(--line);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-on-accent: var(--on-accent);
+  --color-accent-text: var(--accent-text);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-line: var(--accent-line);
+  --color-warn-soft: var(--warn-soft);
+  --color-warn-text: var(--warn-text);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-danger-text: var(--danger-text);
+  --color-tag: var(--tag);
+  --color-attr: var(--attr);
+  --color-str: var(--str);
+}
+
+@layer base {
+  body {
+    @apply bg-page font-sans text-fg antialiased;
+  }
+  h1,
+  h2,
+  h3 {
+    @apply font-display;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg bg-accent px-4 py-2 font-display text-sm font-medium text-on-accent transition hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-50;
+  }
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg border border-line bg-surface px-4 py-2 font-display text-sm font-medium text-fg transition-colors hover:bg-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-50;
+  }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-3 py-2 font-display text-sm font-medium text-muted transition-colors hover:bg-soft hover:text-fg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-50;
+  }
+  /* Pill-shaped field used on the auth pages. */
+  .input {
+    @apply w-full rounded-full border border-line bg-surface px-4 py-2.5 font-mono text-xs text-fg placeholder:text-muted focus:border-accent focus:outline-2 focus:outline-accent/30;
+  }
+}
+
+/* A soft neon glow on the main action in dark mode. */
+.dark .btn-primary {
+  box-shadow: 0 0 16px rgb(45 156 255 / 0.35);
+}
+
+.cm-editor {
+  height: 100%;
+}
+.cm-editor.cm-focused {
+  outline: none;
+}
+
+/* Floating code tags on the auth art. Each tag sets its own --r, --x and --y. */
+@keyframes drift {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(var(--r));
+  }
+  50% {
+    transform: translate(var(--x), var(--y)) rotate(calc(var(--r) + 9deg));
+  }
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes slide-in {
+  from { opacity: 0; transform: translateX(48px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.rise {
+  animation: rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation-delay: var(--d, 0ms);
+}
+.slide-in {
+  animation: slide-in 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation-delay: var(--d, 0ms);
+}
+.float {
+  animation: float var(--dur, 6s) ease-in-out var(--fd, 0s) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rise,
+  .slide-in,
+  .float {
+    animation: none;
+  }
+}
+
+/* Light mode: flip the dark hero image into a light one. Colours keep their hue. */
+.hero-image {
+  filter: invert(1) hue-rotate(180deg);
+}
+.dark .hero-image {
+  filter: none;
+}
