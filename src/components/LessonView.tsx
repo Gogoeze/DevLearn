@@ -14,6 +14,12 @@ import HintPanel from './HintPanel'
 import Preview from './Preview'
 import RichText from './RichText'
 import ThemeToggle from './ThemeToggle'
+import LessonPicker from './LessonPicker'
+import LessonRail from './LessonRail'
+import Checklist from './Checklist'
+
+
+
 
 interface Props {
   mod: CourseModule
@@ -99,19 +105,7 @@ export default function LessonView({ mod, index }: Props) {
               <ChevronLeft className="h-4 w-4" />
             </span>
           )}
-          <select
-            aria-label="Jump to a lesson"
-            value={lesson.id}
-            onChange={(e) => navigate(`/learn/${mod.id}/${e.target.value}`)}
-            className="max-w-[220px] rounded-lg border border-line bg-surface px-2 py-1.5 font-display text-sm text-fg"
-          >
-            {mod.lessons.map((l, i) => (
-              <option key={l.id} value={l.id}>
-                {mod.title} {i + 1}. {l.title}
-                {!user && !l.free ? ' (sign up)' : ''}
-              </option>
-            ))}
-          </select>
+          <LessonPicker mod={mod} index={index} signedIn={Boolean(user)} progress={progress} />
           {next ? (
             <Link to={`/learn/${mod.id}/${next.id}`} className={`${arrowClass} text-muted hover:bg-soft`} aria-label="Next lesson">
               <ChevronRight className="h-4 w-4" />
@@ -134,14 +128,15 @@ export default function LessonView({ mod, index }: Props) {
       </header>
 
       <main className="grid flex-1 grid-cols-1 lg:min-h-0 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
-        <div className="bg-surface lg:overflow-y-auto">
-          <article className="mx-auto max-w-xl space-y-8 p-6 lg:p-8">
+        <div className="bg-surface lg:overflow-y-auto min-[1400px]:flex">
+          <LessonRail mod={mod} index={index} signedIn={Boolean(user)} progress={progress} />
+          <article className="mx-auto min-w-0 max-w-2xl flex-1 space-y-8 p-6 lg:p-8">
             <header>
               <p className="font-display text-sm font-medium text-accent-text">{mod.title}</p>
-              <h1 className="mt-1 text-2xl font-semibold tracking-tight text-fg">{lesson.title}</h1>
+              <h1 className="mt-1 text-2xl font-semibold tracking-tight text-fg  min-[1400px]:text-3xl">{lesson.title}</h1>
             </header>
 
-            <section className="space-y-3 text-[15px] leading-7 text-muted">
+            <section className="space-y-3 text-[15px] leading-7 text-muted  min-[1400px]:text-[17px] min-[1400px]:leading-8">
               {lesson.explanation.map((paragraph, i) => (
                 <p key={i}>
                   <RichText text={paragraph} />
@@ -157,6 +152,8 @@ export default function LessonView({ mod, index }: Props) {
                 <RichText text={challenge.task} />
               </p>
             </section>
+            
+            <Checklist checks={challenge.checks} results={results} done={completed} />
 
             <div className="flex flex-wrap gap-2">
               <button type="button" onClick={handleCheck} className="btn-primary">
@@ -175,7 +172,6 @@ export default function LessonView({ mod, index }: Props) {
               </button>
             </div>
 
-            {results && !allPassed && <CheckResults results={results} />}
 
             {completed && (
               <div className="rounded-xl border border-accent-line bg-accent-soft p-4">

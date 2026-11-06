@@ -52,7 +52,7 @@ export const htmlModule: CourseModule = {
           'You need two lines: one `<h1>...</h1>` and, underneath it, one `<p>...</p>`.',
         ],
         solution: `<h1>Hi, I'm Ada</h1>
-<p>I'm learning to build websites.</p>`,
+<p>I'm learning to  build websites.</p>`,
         solutionNote:
           'Both tags wrap their text with an opening and a closing tag. The `h1` comes first so it appears at the top.',
       },

@@ -1,5 +1,7 @@
 import { createTheme } from '@uiw/codemirror-themes'
 import { tags as t } from '@lezer/highlight'
+import { EditorView } from '@uiw/react-codemirror'
+
 
 interface Palette {
   background: string
@@ -61,4 +63,40 @@ export const darkEditorTheme = makeTheme('dark', {
   attribute: '#8fd0ff',
   string: '#ffd166',
   comment: '#6b7c9e',
+})
+
+/** Styles the suggestion popup. It reads the site's CSS variables, so light and dark both work. */
+export const autocompleteStyle = EditorView.theme({
+  '.cm-tooltip.cm-tooltip-autocomplete': {
+    background: 'var(--surface)',
+    border: '1px solid var(--line)',
+    borderRadius: '10px',
+    boxShadow: '0 10px 30px -10px rgb(0 0 0 / 0.35)',
+    overflow: 'hidden',
+    padding: '4px',
+  },
+  '.cm-tooltip.cm-tooltip-autocomplete > ul': {
+    fontFamily: "'JetBrains Mono', ui-monospace, SFMono-Regular, monospace",
+    fontSize: '12px',
+    maxHeight: '14em',
+    scrollbarWidth: 'thin',
+    scrollbarColor: 'var(--line) transparent',
+  },
+  '.cm-tooltip.cm-tooltip-autocomplete > ul > li': {
+    padding: '4px 10px',
+    borderRadius: '6px',
+    color: 'var(--fg)',
+  },
+  '.cm-tooltip.cm-tooltip-autocomplete > ul > li[aria-selected]': {
+    background: 'var(--accent)',
+    color: 'var(--on-accent)',
+  },
+  '.cm-completionIcon': { display: 'none' },
+  '.cm-completionMatchedText': {
+    textDecoration: 'none',
+    fontWeight: '700',
+    color: 'var(--accent-text)',
+  },
+  '.cm-tooltip-autocomplete li[aria-selected] .cm-completionMatchedText': { color: 'inherit' },
+  '.cm-completionDetail': { color: 'var(--muted)', marginLeft: '0.75em' },
 })
